@@ -1,10 +1,10 @@
-import picamera
-import  pyshine as ps #  pip3 install pyshine==0.0.9
+# import picamera
+# import  pyshine as ps #  pip3 install pyshine==0.0.9
 import numpy as np
 import os
 import pickle, sqlite3
 import cv2
-from PIL import Image
+# from PIL import Image
 #--------------------------------------------------------------------
 # CODE KET NOI DU LIEU NHAN DIEN HINH ANH KHUON MAT
 HTML="""
@@ -33,23 +33,24 @@ def getProfile(Id):
         profile=row
     conn.close()
     return profile
-def get_picamera():
-    StreamProps = ps.StreamProps
-    StreamProps.set_Page(StreamProps,HTML)
-    address = ('192.168.1.1',9000) # Enter your IP address 
-    StreamProps.set_Mode(StreamProps,'picamera')    
-    with picamera.PiCamera(resolution='640x480', framerate=30) as camera:
-        output = ps.StreamOut()
-        StreamProps.set_Output(StreamProps,output)
-        camera.rotation = 90
-        camera.start_recording(output, format='mjpeg')
-        try:
-            server = ps.Streamer(address, StreamProps)
-            print('Server started at','http://'+address[0]+':'+str(address[1]))
-            server.serve_forever()
-        finally:
-            camera.stop_recording()
-cap = cv2.VideoCapture("http://169.254.21.65:9000")
+# def get_picamera():
+#     StreamProps = ps.StreamProps
+#     StreamProps.set_Page(StreamProps,HTML)
+#     address = ('192.168.1.1',9000) # Enter your IP address 
+#     StreamProps.set_Mode(StreamProps,'picamera')    
+#     with picamera.PiCamera(resolution='640x480', framerate=30) as camera:
+#         output = ps.StreamOut()
+#         StreamProps.set_Output(StreamProps,output)
+#         camera.rotation = 90
+#         camera.start_recording(output, format='mjpeg')
+#         try:
+#             server = ps.Streamer(address, StreamProps)
+#             print('Server started at','http://'+address[0]+':'+str(address[1]))
+#             server.serve_forever()
+#         finally:
+#             camera.stop_recording()
+# cap = cv2.VideoCapture("http://169.254.21.65:9000")
+cap = cv2.VideoCapture(0)
 font = cv2.FONT_HERSHEY_COMPLEX
 while True:
 
