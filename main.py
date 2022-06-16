@@ -6,8 +6,6 @@ import pickle, sqlite3
 import cv2
 from PIL import Image
 import face_recognition
-#--------------------------------------------------------------------
-# CODE KET NOI DU LIEU NHAN DIEN HINH ANH KHUON MAT
 
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
 recognizer = cv2.face.LBPHFaceRecognizer_create()
