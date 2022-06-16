@@ -1,35 +1,47 @@
-import face_recognition
-import cv2
+# main
+# img -> encode (128 bit) -> histogram extract -> output(id)
 import numpy as np
+import os
+import pickle, sqlite3
+import cv2
+from PIL import Image
+import face_recognition
+#--------------------------------------------------------------------
+# CODE KET NOI DU LIEU NHAN DIEN HINH ANH KHUON MAT
 
-# This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
-# other example, but it includes some basic performance tweaks to make things run a lot faster:
-#   1. Process each video frame at 1/4 resolution (though still display it at full resolution)
-#   2. Only detect faces in every other frame of video.
+face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
+recognizer = cv2.face.LBPHFaceRecognizer_create()
 
-# PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
-# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
-# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
+recognizer.read("recognizer/trainningData.yml")
 
-# Get a reference to webcam #0 (the default one)
-video_capture = cv2.VideoCapture(0)
+def getProfile(Id):
+    conn=sqlite3.connect("FaceBase.db")
+    query="SELECT * FROM people WHERE ID="+str(Id)
+    cursor=conn.execute(query)
+    profile=None
+    for row in cursor:
+        profile=row
+    conn.close()
+    return profile
 
+cap = cv2.VideoCapture(0)
+font = cv2.FONT_HERSHEY_COMPLEX
 # Load a sample picture and learn how to recognize it.
-obama_image = face_recognition.load_image_file("1.JPG")
-obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
+manh_image = face_recognition.load_image_file("1.JPG")
+manh_face_encoding = face_recognition.face_encodings(manh_image)[0]
 
 # Load a second sample picture and learn how to recognize it.
-biden_image = face_recognition.load_image_file("loan/1.png")
-biden_face_encoding = face_recognition.face_encodings(biden_image)[0]
+loan_image = face_recognition.load_image_file("2.png")
+loan_face_encoding = face_recognition.face_encodings(loan_image)[0]
 
 # Create arrays of known face encodings and their names
 known_face_encodings = [
-    obama_face_encoding,
-    biden_face_encoding
+    manh_face_encoding,
+    loan_face_encoding
 ]
 known_face_names = [
-    "Manh",
-    "Loan"
+    "manh",
+    "loan"
 ]
 
 # Initialize some variables
@@ -37,10 +49,25 @@ face_locations = []
 face_encodings = []
 face_names = []
 process_this_frame = True
-
+detect_face_histogram = "his"
+detect_face_encode = "enc"
 while True:
-    # Grab a single frame of video
-    ret, frame = video_capture.read()
+    ret, img = cap.read()
+    frame = img
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+    for (x,y,w,h) in faces:
+        # cv2.rectangle(img, (x,y), (x+w, y+h), (0,255,0), 2)
+        roi_gray = gray[y:y+h, x:x+w]
+        roi_color = img[y:y+h, x:x+w]
+        nbr_predicted, conf = recognizer.predict(gray[y:y+h, x:x+w])
+        if conf < 40:
+            profile=getProfile(nbr_predicted)
+            if profile != None:
+                detect_face_histogram = str(profile[1])
+                # print("Xin chao Anh/Chi " + str(profile[1]) + " toi MAJ")
+        else:
+            cv2.putText(img, "Unknown", (x, y + h + 30), font, 0.4, (0, 0, 255), 1)
 
     # Only process every other frame of video to save time
     if process_this_frame:
@@ -83,22 +110,20 @@ while True:
         right *= 4
         bottom *= 4
         left *= 4
-
+        detect_face_encode = str(name)
+    if detect_face_histogram == detect_face_encode:
+        print(print("Xin chao " + str(name).upper() + " toi MAJ"))
         # Draw a box around the face
         cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
-
         # Draw a label with a name below the face
         cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
         font = cv2.FONT_HERSHEY_DUPLEX
         cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
-
-    # Display the resulting image
-    cv2.imshow('Video', frame)
-
-    # Hit 'q' on the keyboard to quit!
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+        detect_face_histogram = "his"
+        detect_face_encode = "enc"
+    cv2.imshow('MAJ Vision', img)
+    if(cv2.waitKey(1) == ord('q')):
         break
-
-# Release handle to the webcam
-video_capture.release()
+cap.release()
 cv2.destroyAllWindows()
+
