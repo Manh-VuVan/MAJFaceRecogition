@@ -1,12 +1,10 @@
 # main
 # img -> encode (128 bit) -> histogram extract -> output(id)
 import numpy as np
-import os
-import pickle, sqlite3
+import sqlite3
 import cv2
-from PIL import Image
 import face_recognition
-
+from caltime import caltime
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 
@@ -110,7 +108,8 @@ while True:
         left *= 4
         detect_face_encode = str(name)
     if detect_face_histogram == detect_face_encode:
-        print(print("Xin chao " + str(name).upper() + " toi MAJ"))
+        print("Xin chao " + str(name).upper() + " toi MAJ")
+        caltime()
         # Draw a box around the face
         cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
         # Draw a label with a name below the face
