@@ -5,8 +5,8 @@ import sqlite3
 import cv2
 import face_recognition
 import csv 
-from caltime import caltime_arrive
-face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
+from source.caltime import caltime_arrive
+face_cascade = cv2.CascadeClassifier('./source/haarcascade_frontalface_alt.xml')
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 
 recognizer.read("recognizer/trainningData.yml")
@@ -32,11 +32,11 @@ def process_staff(staff):
 cap = cv2.VideoCapture(0)
 font = cv2.FONT_HERSHEY_COMPLEX
 # Load a sample picture and learn how to recognize it.
-manh_image = face_recognition.load_image_file("1.JPG")
+manh_image = face_recognition.load_image_file("./source/img_decode/1.JPG")
 manh_face_encoding = face_recognition.face_encodings(manh_image)[0]
 
 # Load a second sample picture and learn how to recognize it.
-loan_image = face_recognition.load_image_file("2.png")
+loan_image = face_recognition.load_image_file("./source/img_decode/2.png")
 loan_face_encoding = face_recognition.face_encodings(loan_image)[0]
 
 # Create arrays of known face encodings and their names
