@@ -1,6 +1,8 @@
 # Calculating time, which measure staff go to company early or late.
 from datetime import datetime
 from dateutil import parser
+from source.writecsvlog import update_file
+from source.pushfilelog import pushfilelog
 name_before, day_before = "", ""
 staff = []
 first_handle = False
@@ -57,8 +59,8 @@ def caltime_arrive(name):
             if len(staff[i]) <=5:
                 staff[i].append(str(leave[0]))
                 staff[i].append(str(leave[1]))
-                from source.writecsvlog import update_file
                 update_file(staff[i])
+                pushfilelog()
             break
         else:
             print("End Staff")

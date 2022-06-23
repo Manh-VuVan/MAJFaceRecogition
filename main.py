@@ -32,11 +32,11 @@ def process_staff(staff):
 cap = cv2.VideoCapture(0)
 font = cv2.FONT_HERSHEY_COMPLEX
 # Load a sample picture and learn how to recognize it.
-manh_image = face_recognition.load_image_file("./source/img_decode/1.JPG")
+manh_image = face_recognition.load_image_file("./source/img_decode/manh.JPG")
 manh_face_encoding = face_recognition.face_encodings(manh_image)[0]
 
 # Load a second sample picture and learn how to recognize it.
-loan_image = face_recognition.load_image_file("./source/img_decode/2.png")
+loan_image = face_recognition.load_image_file("./source/img_decode/loan.png")
 loan_face_encoding = face_recognition.face_encodings(loan_image)[0]
 
 # Create arrays of known face encodings and their names
