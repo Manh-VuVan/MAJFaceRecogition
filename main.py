@@ -39,14 +39,23 @@ manh_face_encoding = face_recognition.face_encodings(manh_image)[0]
 loan_image = face_recognition.load_image_file("./source/img_decode/loan.png")
 loan_face_encoding = face_recognition.face_encodings(loan_image)[0]
 
+atrung_image = face_recognition.load_image_file("./source/img_decode/atrung.jpg")
+atrung_face_encoding = face_recognition.face_encodings(atrung_image)[0]
+
 # Create arrays of known face encodings and their names
 known_face_encodings = [
     manh_face_encoding,
-    loan_face_encoding
+    loan_face_encoding,
+    atrung_face_encoding
 ]
+print("manh: ", manh_face_encoding)
+print("loan: ", loan_face_encoding)
+print("atrung: ", atrung_face_encoding)
+print("encode: ", known_face_encodings)
 known_face_names = [
     "manh",
-    "loan"
+    "loan",
+    "atrung"
 ]
 
 # Initialize some variables

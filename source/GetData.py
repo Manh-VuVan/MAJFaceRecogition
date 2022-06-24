@@ -5,7 +5,7 @@ import os
 #------ Update record to databse -------
 def insertOrUpdate(id, name):
     #connect to db
-    conn = sqlite3.connect("FaceBase.db")
+    conn = sqlite3.connect("./FaceBase.db")
     
     #check if ID already exists
     query = "SELECT * FROM people WHERE ID="+str(id)
@@ -26,7 +26,7 @@ def insertOrUpdate(id, name):
 #------- nhan dien khuon mat vs webcam -------
 
 # load thu vien nhan dang khuon mat default OpenCV
-face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
+face_cascade = cv2.CascadeClassifier('./source/haarcascade_frontalface_alt.xml')
 cap = cv2.VideoCapture(0)
 
 # insert database
@@ -57,10 +57,11 @@ while(True):
         #save the captured face in the dataset folder
         cv2.imwrite('dataSet/User.'+ str(id)+'.'+str(sampleNum)+'.jpg', gray[y:y+h,x:x+w])
 
-    cv2.imshow('frame',frame)
-    cv2.waitKey(1)
+    cv2.imshow('MAJ Vision', frame)
+    if(cv2.waitKey(1) == ord('q')):
+        break
     # break if the sample number is morethan 100
-    if sampleNum>1000:
+    if sampleNum>100:
          cap.release()
          cv2.destroyAllWindows()
          break;

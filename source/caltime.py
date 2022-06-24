@@ -105,8 +105,8 @@ def caltime_leave():
             state_leave = "Muon"
             print("late")
     except:
-        state_leave = "Muon"
-        print("Late: ", delta_time)
+        state_leave = "Som"
+        print("Som: ", delta_time)
         time_leave = delta_time
     leave.append(state_leave)
     leave.append(time_leave)
