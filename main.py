@@ -4,7 +4,7 @@ import numpy as np
 import sqlite3
 import cv2
 import face_recognition
-import csv 
+import pickle
 from source.caltime import caltime_arrive
 face_cascade = cv2.CascadeClassifier('./source/haarcascade_frontalface_alt.xml')
 recognizer = cv2.face.LBPHFaceRecognizer_create()
@@ -31,32 +31,11 @@ def process_staff(staff):
         staff[i] = rotate(staff[i], -1)  
 cap = cv2.VideoCapture(0)
 font = cv2.FONT_HERSHEY_COMPLEX
-# Load a sample picture and learn how to recognize it.
-manh_image = face_recognition.load_image_file("./source/img_decode/manh.JPG")
-manh_face_encoding = face_recognition.face_encodings(manh_image)[0]
-
-# Load a second sample picture and learn how to recognize it.
-loan_image = face_recognition.load_image_file("./source/img_decode/loan.png")
-loan_face_encoding = face_recognition.face_encodings(loan_image)[0]
-
-atrung_image = face_recognition.load_image_file("./source/img_decode/atrung.jpg")
-atrung_face_encoding = face_recognition.face_encodings(atrung_image)[0]
-
-# Create arrays of known face encodings and their names
-known_face_encodings = [
-    manh_face_encoding,
-    loan_face_encoding,
-    atrung_face_encoding
-]
-print("manh: ", manh_face_encoding)
-print("loan: ", loan_face_encoding)
-print("atrung: ", atrung_face_encoding)
-print("encode: ", known_face_encodings)
-known_face_names = [
-    "manh",
-    "loan",
-    "atrung"
-]
+# Load face encodings
+with open('dataset_faces.dat', 'rb') as f:
+	all_face_encodings = pickle.load(f)
+known_face_encodings = np.array(list(all_face_encodings.values()))
+known_face_names = list(all_face_encodings.keys())
 
 # Initialize some variables
 face_locations = []
